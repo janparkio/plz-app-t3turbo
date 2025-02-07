@@ -1,12 +1,12 @@
 {
   "name": "@plz/auth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "exports": {
     ".": {
-      "react-server": "./src/index.rsc.ts",
-      "default": "./src/index.ts"
+      "default": "./src/index.ts",
+      "react-server": "./src/index.rsc.ts"
     },
     "./env": "./env.ts"
   },
@@ -18,12 +18,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@plz/db": "workspace:*",
     "@auth/core": "0.37.2",
     "@auth/drizzle-adapter": "1.7.4",
+    "@plz/db": "workspace:*",
+    "@supabase/auth-helpers-nextjs": "^0.8.7",
+    "@supabase/supabase-js": "^2.39.0",
     "@t3-oss/env-nextjs": "^0.12.0",
     "next": "^14.2.23",
-    "next-auth": "5.0.0-beta.25",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
     "zod": "catalog:"

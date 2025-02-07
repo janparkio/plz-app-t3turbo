@@ -26,6 +26,40 @@ const adapter = DrizzleAdapter(db, {
   sessionsTable: Session,
 });
 
+import { createClient } from '@supabase/supabase-js';
+
+export const supabase = createClient(
+  env.NEXT_PUBLIC_SUPABASE_URL,
+  env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+export interface Session {
+  user: {
+    id: string;
+    email?: string | null;
+    name?: string | null;
+    image?: string | null;
+  };
+}
+
+export const validateToken = async (token: string): Promise<Session | null> => {
+  const { data: { session }, error } = await supabase.auth.getSession();
+  if (error || !session) return null;
+  
+  return {
+    user: {
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.user_metadata?.name,
+      image: session.user.user_metadata?.avatar_url,
+    }
+  };
+};
+
+export const invalidateSessionToken = async () => {
+  await supabase.auth.signOut();
+};
+
 export const isSecureContext = env.NODE_ENV !== "development";
 
 export const authConfig = {

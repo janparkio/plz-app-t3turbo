@@ -11,10 +11,10 @@ export async function AuthShowcase() {
           size="lg"
           formAction={async () => {
             "use server";
-            await signIn("discord");
+            await signIn("email");
           }}
         >
-          Sign in with Discord
+          Sign in with Email
         </Button>
       </form>
     );

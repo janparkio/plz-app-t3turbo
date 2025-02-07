@@ -1,19 +1,23 @@
 import { cache } from "react";
-import NextAuth from "next-auth";
+import { supabase } from "./config";
 
-import { authConfig } from "./config";
+export type { Session } from "./config";
 
-export type { Session } from "next-auth";
+const auth = cache(async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return null;
+  
+  return {
+    user: {
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.user_metadata?.name,
+      image: session.user.user_metadata?.avatar_url,
+    }
+  };
+});
 
-const { handlers, auth: defaultAuth, signIn, signOut } = NextAuth(authConfig);
-
-/**
- * This is the main way to get session data for your RSCs.
- * This will de-duplicate all calls to next-auth's default `auth()` function and only call it once per request
- */
-const auth = cache(defaultAuth);
-
-export { handlers, auth, signIn, signOut };
+export { auth, supabase };
 
 export {
   invalidateSessionToken,
